@@ -7,8 +7,9 @@ namespace ExcelDataReader.Core.CsvFormat
 {
     internal class CsvWorksheet : IWorksheet
     {
-        public CsvWorksheet(Stream stream, Encoding fallbackEncoding, char[] autodetectSeparators, int analyzeInitialCsvRows)
+        public CsvWorksheet(Stream stream, Encoding fallbackEncoding, char[] autodetectSeparators, int analyzeInitialCsvRows, int maxRowsPerSheet)
         {
+            MaxRowsPerSheet = maxRowsPerSheet;
             Stream = stream;
             Stream.Seek(0, SeekOrigin.Begin);
             try
@@ -76,6 +77,8 @@ namespace ExcelDataReader.Core.CsvFormat
 
         private int AnalyzedRowCount { get; }
 
+        private int MaxRowsPerSheet { get; }
+
         public IEnumerable<Row> ReadRows()
         {
             var bufferSize = 1024;
@@ -98,6 +101,8 @@ namespace ExcelDataReader.Core.CsvFormat
                 }
 
                 rowIndex += bufferRows.Count;
+                if (MaxRowsPerSheet > 0 && rowIndex >= MaxRowsPerSheet - 1)
+                    break;
             }
 
             csv.Flush(out var flushRows);

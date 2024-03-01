@@ -17,8 +17,10 @@ namespace ExcelDataReader.Core.OpenXmlFormat
 
         private readonly ZipWorker _zipWorker;
 
-        public XlsxWorkbook(ZipWorker zipWorker)
+        public XlsxWorkbook(ZipWorker zipWorker, int maxRowsPerSheet)
+            : base(maxRowsPerSheet)
         {
+            MaxRowsPerSheet = maxRowsPerSheet;
             _zipWorker = zipWorker;
 
             ReadWorkbook();
@@ -39,7 +41,7 @@ namespace ExcelDataReader.Core.OpenXmlFormat
         {
             foreach (var sheet in Sheets)
             {
-                yield return new XlsxWorksheet(_zipWorker, this, sheet);
+                yield return new XlsxWorksheet(_zipWorker, this, sheet, MaxRowsPerSheet);
             }
         }
 

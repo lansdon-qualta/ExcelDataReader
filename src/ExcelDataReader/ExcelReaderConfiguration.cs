@@ -34,5 +34,11 @@ namespace ExcelDataReader
         /// Default: 0 - analyzes the entire file (CSV only, has no effect on other formats)
         /// </summary>
         public int AnalyzeInitialCsvRows { get; set; }
+
+        /// <summary>
+        /// Gets or sets a limit on how many rows the ExcelDataReader reads per sheet
+        /// Less than 1 means all rows
+        /// </summary>
+        public int MaxRowsPerSheet { get; set; }
     }
 }

@@ -5,10 +5,12 @@ namespace ExcelDataReader
 {
     internal class ExcelOpenXmlReader : ExcelDataReader<XlsxWorkbook, XlsxWorksheet>
     {
-        public ExcelOpenXmlReader(Stream stream)
+        public ExcelOpenXmlReader(Stream stream, int maxRowsPerSheet = 0)
+            : base(maxRowsPerSheet)
         {
+            MaxRowsPerSheet = maxRowsPerSheet;
             Document = new ZipWorker(stream);
-            Workbook = new XlsxWorkbook(Document);
+            Workbook = new XlsxWorkbook(Document, maxRowsPerSheet);
 
             // By default, the data reader is positioned on the first result.
             Reset();

@@ -7,7 +7,7 @@ namespace ExcelDataReader.Core.OpenXmlFormat
 {
     internal class XlsxWorksheet : IWorksheet
     {
-        public XlsxWorksheet(ZipWorker document, XlsxWorkbook workbook, SheetRecord refSheet)
+        public XlsxWorksheet(ZipWorker document, XlsxWorkbook workbook, SheetRecord refSheet, int maxRows)
         {
             Document = document;
             Workbook = workbook;
@@ -68,6 +68,9 @@ namespace ExcelDataReader.Core.OpenXmlFormat
                         HeaderFooter = headerFooter.HeaderFooter;
                         break;
                 }
+
+                if (maxRows > 0 && rowIndexMaximum >= maxRows - 1)
+                    break;
             }
 
             ColumnWidths = columnWidths.ToArray();

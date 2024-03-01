@@ -19,6 +19,11 @@ namespace ExcelDataReader
         private IEnumerator<TWorksheet> _cachedWorksheetIterator;
         private List<TWorksheet> _cachedWorksheets;
 
+        protected ExcelDataReader(int maxRowsPerSheet = 0)
+        {
+            MaxRowsPerSheet = maxRowsPerSheet;
+        }
+
         ~ExcelDataReader()
         {
             Dispose(false);
@@ -56,6 +61,8 @@ namespace ExcelDataReader
         public object this[int i] => GetValue(i);
 
         public object this[string name] => throw new NotSupportedException();
+
+        public int MaxRowsPerSheet { get; set; }
 
         public bool GetBoolean(int i) => (bool)GetValue(i);
 
@@ -263,7 +270,7 @@ namespace ExcelDataReader
                 return false;
             }
 
-            if (!_rowIterator.MoveNext())
+            if ((MaxRowsPerSheet > 0 && Depth >= MaxRowsPerSheet) || !_rowIterator.MoveNext())
             {
                 _rowIterator.Dispose();
                 _rowIterator = null;

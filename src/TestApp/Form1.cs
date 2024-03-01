@@ -48,9 +48,11 @@ namespace TestApp
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.dataSet1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -58,6 +60,7 @@ namespace TestApp
             this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.Filter = "Supported files|*.xls;*.xlsx;*.xlsb;*.csv|xls|*.xls|xlsx|*.xlsx|xlsb|*.xlsb|csv|*" +
     ".csv|All|*.*";
+            this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // button1
             // 
@@ -154,6 +157,7 @@ namespace TestApp
             this.statusStrip1.Size = new System.Drawing.Size(887, 22);
             this.statusStrip1.TabIndex = 7;
             this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip1_ItemClicked);
             // 
             // toolStripStatusLabel1
             // 
@@ -169,11 +173,19 @@ namespace TestApp
             this.label1.TabIndex = 8;
             this.label1.Text = "Path";
             // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(685, 84);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 9;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(887, 574);
+            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.firstRowNamesCheckBox);
@@ -190,6 +202,7 @@ namespace TestApp
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,6 +222,7 @@ namespace TestApp
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private Label label1;
+        private NumericUpDown numericUpDown1;
         private DataSet ds;
 
         public Form1()
@@ -258,7 +272,8 @@ namespace TestApp
                 var sw = new Stopwatch();
                 sw.Start();
 
-                using IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream);
+                var maxRowsPerSheet = (int)numericUpDown1.Value;
+                using IExcelDataReader reader = ExcelReaderFactory.CreateReader(stream, new ExcelReaderConfiguration() { MaxRowsPerSheet = maxRowsPerSheet });
 
                 var openTiming = sw.ElapsedMilliseconds;
                 // reader.IsFirstRowAsColumnNames = firstRowNamesCheckBox.Checked;
@@ -299,6 +314,16 @@ namespace TestApp
         private void SheetComboSelectedIndexChanged(object sender, EventArgs e)
         {
             SelectTable();
+        }
+
+        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
         }
     }
 }

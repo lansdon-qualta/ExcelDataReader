@@ -46,7 +46,7 @@ namespace ExcelDataReader
                 var document = new CompoundDocument(fileStream);
                 if (TryGetWorkbook(fileStream, document, out var stream))
                 {
-                    return new ExcelBinaryReader(stream, configuration.Password, configuration.FallbackEncoding);
+                    return new ExcelBinaryReader(stream, configuration.Password, configuration.FallbackEncoding, configuration.MaxRowsPerSheet);
                 }
 
                 if (TryGetEncryptedPackage(fileStream, document, configuration.Password, out stream))
@@ -59,13 +59,13 @@ namespace ExcelDataReader
 
             if (XlsWorkbook.IsRawBiffStream(probe))
             {
-                return new ExcelBinaryReader(fileStream, configuration.Password, configuration.FallbackEncoding);
+                return new ExcelBinaryReader(fileStream, configuration.Password, configuration.FallbackEncoding, configuration.MaxRowsPerSheet);
             }
 
             if (probe[0] == 0x50 && probe[1] == 0x4B)
             {
                 // zip files start with 'PK'
-                return new ExcelOpenXmlReader(fileStream);
+                return new ExcelOpenXmlReader(fileStream, configuration.MaxRowsPerSheet);
             }
 
             throw new HeaderException(Errors.ErrorHeaderSignature);
@@ -99,7 +99,7 @@ namespace ExcelDataReader
                 var document = new CompoundDocument(fileStream);
                 if (TryGetWorkbook(fileStream, document, out var stream))
                 {
-                    return new ExcelBinaryReader(stream, configuration.Password, configuration.FallbackEncoding);
+                    return new ExcelBinaryReader(stream, configuration.Password, configuration.FallbackEncoding, configuration.MaxRowsPerSheet);
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace ExcelDataReader
             }
             else if (XlsWorkbook.IsRawBiffStream(probe))
             {
-                return new ExcelBinaryReader(fileStream, configuration.Password, configuration.FallbackEncoding);
+                return new ExcelBinaryReader(fileStream, configuration.Password, configuration.FallbackEncoding, configuration.MaxRowsPerSheet);
             }
             else
             {
@@ -145,7 +145,7 @@ namespace ExcelDataReader
                 var document = new CompoundDocument(fileStream);
                 if (TryGetEncryptedPackage(fileStream, document, configuration.Password, out var stream))
                 {
-                    return new ExcelOpenXmlReader(stream);
+                    return new ExcelOpenXmlReader(stream, configuration.MaxRowsPerSheet);
                 }
 
                 throw new ExcelReaderException(Errors.ErrorCompoundNoOpenXml);
@@ -154,7 +154,7 @@ namespace ExcelDataReader
             if (probe[0] == 0x50 && probe[1] == 0x4B)
             {
                 // Zip files start with 'PK'
-                return new ExcelOpenXmlReader(fileStream);
+                return new ExcelOpenXmlReader(fileStream, configuration.MaxRowsPerSheet);
             }
 
             throw new HeaderException(Errors.ErrorHeaderSignature);
@@ -178,7 +178,7 @@ namespace ExcelDataReader
                 fileStream = new LeaveOpenStream(fileStream);
             }
 
-            return new ExcelCsvReader(fileStream, configuration.FallbackEncoding, configuration.AutodetectSeparators, configuration.AnalyzeInitialCsvRows);
+            return new ExcelCsvReader(fileStream, configuration.FallbackEncoding, configuration.AutodetectSeparators, configuration.AnalyzeInitialCsvRows, configuration.MaxRowsPerSheet);
         }
 
         private static bool TryGetWorkbook(Stream fileStream, CompoundDocument document, out Stream stream)

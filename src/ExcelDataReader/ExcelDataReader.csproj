@@ -5,7 +5,7 @@
     <AssemblyTitle>ExcelDataReader</AssemblyTitle>
     <VersionPrefix>3.7.0</VersionPrefix>
     <Authors>ExcelDataReader developers</Authors>
-    <TargetFrameworks>net20;net45;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard1.3;netstandard2.0</TargetFrameworks>
     <AssemblyName>ExcelDataReader</AssemblyName>
     <AssemblyOriginatorKeyFile>..\ExcelDataReader.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
@@ -52,7 +52,7 @@
 
   <ItemGroup>
     <None Include="..\ExcelDataReader.snk" Link="ExcelDataReader.snk" />
-    <None Include="..\ExcelDataReader.png" Pack="true" PackagePath="\"/>
+    <None Include="..\ExcelDataReader.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>

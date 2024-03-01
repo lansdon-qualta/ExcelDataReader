@@ -9,9 +9,10 @@ namespace ExcelDataReader
     /// </summary>
     internal class ExcelBinaryReader : ExcelDataReader<XlsWorkbook, XlsWorksheet>
     {
-        public ExcelBinaryReader(Stream stream, string password, Encoding fallbackEncoding)
+        public ExcelBinaryReader(Stream stream, string password, Encoding fallbackEncoding, int maxRowsPerSheet) 
+            : base(maxRowsPerSheet)
         {
-            Workbook = new XlsWorkbook(stream, password, fallbackEncoding);
+            Workbook = new XlsWorkbook(stream, password, fallbackEncoding, maxRowsPerSheet);
 
             // By default, the data reader is positioned on the first result.
             Reset();

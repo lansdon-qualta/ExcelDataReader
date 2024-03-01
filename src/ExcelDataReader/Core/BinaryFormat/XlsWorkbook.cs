@@ -13,7 +13,8 @@ namespace ExcelDataReader.Core.BinaryFormat
     /// </summary>
     internal class XlsWorkbook : CommonWorkbook, IWorkbook<XlsWorksheet>
     {
-        internal XlsWorkbook(Stream stream, string password, Encoding fallbackEncoding)
+        internal XlsWorkbook(Stream stream, string password, Encoding fallbackEncoding, int maxRowsPerSheet)
+            : base(maxRowsPerSheet)
         {
             Stream = stream;
 

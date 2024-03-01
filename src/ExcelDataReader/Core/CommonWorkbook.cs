@@ -9,6 +9,11 @@ namespace ExcelDataReader.Core
     /// </summary>
     internal class CommonWorkbook
     {
+        protected CommonWorkbook(int maxRowsPerSheet)
+        {
+            MaxRowsPerSheet = maxRowsPerSheet;
+        }
+
         /// <summary>
         /// Gets the dictionary of global number format strings. Always includes the built-in formats at their
         /// corresponding indices and any additional formats specified in the workbook file.
@@ -24,6 +29,8 @@ namespace ExcelDataReader.Core
         /// Gets the Cell Style XFs
         /// </summary>
         public List<ExtendedFormat> CellStyleExtendedFormats { get; } = new List<ExtendedFormat>();
+
+        public int MaxRowsPerSheet { get; set; }
 
         private NumberFormatString GeneralNumberFormat { get; } = new NumberFormatString("General");
 
